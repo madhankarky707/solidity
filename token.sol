@@ -3,8 +3,11 @@ contract erc20
      function initialization(string _name,string _symbol)public /*constant returns(bool success)*/;
      function transfer(address to,uint256 value)public  returns(bool success);
      function transferfrom(address from,address to ,uint256 value)public returns(bool success);
+     function balance(address _owner) constant returns (uint256 balance);
+       function approval(address spender,uint256 value)public returns(uint256);
+        function balance1(address spender)public constant  returns (uint256 balance);
         event Transfer(address from, address to, uint256 value);
-    //event Approval(address owner, address indexed _spender, uint256 _value);
+    event Approval(address owner, address indexed _spender, uint256 _value);
 }
 contract token is erc20
 {
@@ -24,7 +27,6 @@ contract token is erc20
 }
    function transfer(address to,uint256 value)public returns(bool success)
    {
-       require(to!=0x0);
         require(balanceOf[msg.sender]>=value);
        balanceOf[msg.sender]-=value;
        balanceOf[to]+=value;
@@ -33,9 +35,8 @@ contract token is erc20
    }
    function transferfrom(address from,address to ,uint256 value)public returns(bool success)
    {
-       if(allowed[from][msg.sender]>=value && balanceOf[msg.sender]>=value)
+       if(allowed[from][msg.sender]>=value)
        {
-           balanceOf[msg.sender]-=value;
         allowed[from][msg.sender]-=value;
        balanceOf[to]+=value;
        }
@@ -50,6 +51,7 @@ contract token is erc20
    function approval(address spender,uint256 value)public returns(uint256)
     {
         allowed[spender][msg.sender]=value;
+        balanceOf[msg.sender]-=value;
         return allowed[spender][msg.sender];
   
     }
