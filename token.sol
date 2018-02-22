@@ -7,7 +7,7 @@ contract erc20
        function approval(address spender,uint256 value)public returns(uint256);
         function balance1(address spender)public constant  returns (uint256 balance);
         event Transfer(address from, address to, uint256 value);
-    event Approval(address owner, address indexed _spender, uint256 _value);
+    //event Approval(address owner, address indexed _spender, uint256 _value);
 }
 contract token is erc20
 {
@@ -35,7 +35,7 @@ contract token is erc20
    }
    function transferfrom(address from,address to ,uint256 value)public returns(bool success)
    {
-       if(allowed[from][msg.sender]>=value)
+     require(allowed[from][msg.sender]>=value);
        {
         allowed[from][msg.sender]-=value;
        balanceOf[to]+=value;
@@ -59,4 +59,3 @@ contract token is erc20
      return allowed[spender][msg.sender];
 }
 }
-
