@@ -160,3 +160,76 @@ contract hotelmanagement
   }
     
 }
+
+PROGRAM:3
+VOTING 3 CANDIDATE AND 10 VOTERS
+
+
+pragma solidity^0.4.0;
+contract election
+{
+    struct candidate
+    {
+        string name;
+        uint256 id;
+        uint256 nov;
+    }
+    uint256[] voter;
+    mapping(uint256=>candidate)candi;
+   
+    function nomination(uint256 a,string name,uint256 id)public
+    {
+        require(a<3);
+        candi[a].name=name;
+        candi[a].id=id;
+        candi[a].nov=0;
+    }
+    function eligibility(uint256 o,uint256 a)public
+   {
+      require(o<10);
+       voter.push(o);
+       for(uint256 n=0;n<voter.length;n++)
+       {
+           for(uint256 m=n+1;m<voter.length;m++)
+           {
+               require(voter[n]!=voter[m]);
+           }
+       }
+        //require(candi[a].id==_id);
+        candi[a].nov++;
+   }
+   function result()public returns(uint256)
+   {
+     uint256 temp;
+       for(uint256 i=0;i<3;i++)
+       {
+           for(uint256 j=i+1;j<3;j++)
+           {
+               if(candi[i].nov<candi[j].nov)
+               {
+                  temp=candi[i].nov;
+                 candi[i].nov=candi[j].nov;
+                  candi[j].nov=temp;
+                  
+               }
+           }
+       }
+     
+       return candi[i].nov;
+   }
+   function disply()public constant returns(uint256)
+   {
+       for(uint h=0;h<3;h++)
+       {
+             if(candi[0].nov==candi[h].nov)
+       {
+           return candi[h].id ;
+       }
+       }
+   }
+   
+   function display(uint256 a)public constant returns(uint256,uint256)
+   {
+       return (candi[a].id,candi[a].nov);
+   }
+}
