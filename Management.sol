@@ -109,22 +109,57 @@ contract hotelmanagement
         string dishname;
         uint256 dishprice;
     }
+   uint256[] token;
+   uint256[] tableno;
+   uint256 tokken;
     mapping(address=>dish1)dish;
-   // mapping(address=>dish1)customer1;
     function todayspl(address a,string _name,uint256 _price)public
     {
         dish[a].dishname=_name;
         dish[a].dishprice=_price;
     }
-    modifier check(address a,uint256 price)
+    function customer1(address a,string name,uint256 price)public  returns(uint256[])
     {
-        require(dish[a].dishprice==price);
-        _;
+         require(dish[a].dishprice==price);
+         tokken++;
+         token.push(tokken);
+         return token;
     }
-    function customer(address a,string name,uint256 price)check(a,price)public constant returns(string)
-    {
-       
-          return "token";
-    }
+   function tokencounter(uint256 tokken)public returns(uint256[])
+   {
+       uint256 m=tokken;
+         while(m<500)
+      {
+          for(uint256 n=0;n<token.length;n++)
+          {
+              if(m==token[n])
+              {
+                  uint256 tablenoo=123;
+                  tablenoo++;
+                  tableno.push(tablenoo); 
+                  return tableno;
+              }
+             
+          }
+      }
+   }
+      function serving(string dish,uint256 tabbleno)public constant returns(string)
+  {
+      uint256 i=tabbleno;
+      while(i<500)
+      {
+          for(uint256 j=0;j<tableno.length;j++)
+          {
+              if(i==tableno[j])
+              {
+                  return "Enjoy your dish";
+              }
+              else
+              {
+                  return "plz check tableno correctly";
+              }
+          }
+      }
+  }
     
 }
