@@ -112,6 +112,7 @@ contract hotelmanagement
    uint256[] token;
    uint256[] tableno;
    uint256 tokken;
+    uint256 tablenoo=123;
     mapping(address=>dish1)dish;
     function todayspl(address a,string _name,uint256 _price)public
     {
@@ -125,7 +126,7 @@ contract hotelmanagement
          token.push(tokken);
          return token;
     }
-   function tokencounter(uint256 tokken)public returns(uint256[])
+   function tokencounter(uint256 tokken)public returns(uint256)
    {
        uint256 m=tokken;
          while(m<500)
@@ -134,10 +135,9 @@ contract hotelmanagement
           {
               if(m==token[n])
               {
-                  uint256 tablenoo=123;
                   tablenoo++;
                   tableno.push(tablenoo); 
-                  return tableno;
+                  return tableno[n];
               }
              
           }
@@ -154,10 +154,7 @@ contract hotelmanagement
               {
                   return "Enjoy your dish";
               }
-              else
-              {
-                  return "plz check tableno correctly";
-              }
+            
           }
       }
   }
