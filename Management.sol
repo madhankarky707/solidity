@@ -162,7 +162,7 @@ contract hotelmanagement
 }
 
 PROGRAM:3
-VOTING 3 CANDIDATE AND 10 VOTERS
+VOTING 3 CANDIDATE in 10 VOTERS
 
 
 pragma solidity^0.4.0;
@@ -175,6 +175,7 @@ contract election
         uint256 nov;
     }
     uint256[] voter;
+    uint256[] candy;
     mapping(uint256=>candidate)candi;
    
     function nomination(uint256 a,string name,uint256 id)public
@@ -198,34 +199,52 @@ contract election
         //require(candi[a].id==_id);
         candi[a].nov++;
    }
-   function result()public returns(uint256)
+   function result()public returns(uint256[])
    {
+       for(uint256 q=0;q<3;q++)
+       {
+           candy.push(candi[q].nov);
+       }
      uint256 temp;
        for(uint256 i=0;i<3;i++)
        {
            for(uint256 j=i+1;j<3;j++)
            {
-               if(candi[i].nov<candi[j].nov)
+               if(candy[i]<candy[j])
                {
-                  temp=candi[i].nov;
-                 candi[i].nov=candi[j].nov;
-                  candi[j].nov=temp;
+                  temp=candy[i];
+                 candy[i]=candy[j];
+                  candy[j]=temp;
                   
                }
            }
        }
      
-       return candi[i].nov;
+       return candy;
    }
-   function disply()public constant returns(uint256)
+   function disply()public constant returns(uint256,string)
    {
        for(uint h=0;h<3;h++)
        {
-             if(candi[0].nov==candi[h].nov)
+             if(candy[0]==candi[h].nov)
        {
-           return candi[h].id ;
+           return (candi[h].id,"is a winner") ;
        }
        }
+        /*for( h=0;h<3;h++)
+       {
+       if(candy[1]==candi[h].nov)
+       {
+           return (candi[h].id,"is a runner") ;
+       }
+       }
+       for( h=0;h<3;h++)
+       {
+       if(candy[2]==candi[h].nov)
+       {
+           return (candi[h].id,"is a looser") ;
+       }
+   }*/
    }
    
    function display(uint256 a)public constant returns(uint256,uint256)
