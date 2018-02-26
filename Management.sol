@@ -328,3 +328,45 @@ contract librarymanagement
         return (b[a].id, /*b[a].name,*/b[a].available);
     }
 }
+
+"OR"
+
+
+pragma solidity^0.4.0;
+contract librarymanagement
+{
+    uint256[] c;
+    struct book{
+        uint256 id;
+        uint256 available;
+    }
+    mapping(address=>book)b;
+    mapping(address=>mapping(address=>book))d;
+ function booksinlibrary(address a,uint256 id,uint256 available)public
+    {
+        b[a].id=id;
+         b[a].available=available;
+    }
+    function studentdetails(address studentid,address _id,address a)public
+    {
+       d[studentid][_id].id= b[a].id;
+     b[a].available--;
+    }
+    function retaking(address studentid,address _id,address a)public
+    {
+        require(d[studentid][_id].id!= b[a].id);
+         d[studentid][_id].id= b[a].id;
+         b[a].available--;
+    }
+      function bookreturning(address studentid,address _id,address a,uint256 n)public returns(address,uint256)
+    {
+         d[studentid][_id].id=0;
+         b[a].available++;
+    
+        return (studentid,b[a].available);
+    }
+     function studentdetailyhets(address studentid,address _id,address a)public constant returns(uint256,uint256,uint256)
+    {
+      return (d[studentid][_id].id,b[a].id,b[a].available);
+    }
+}
