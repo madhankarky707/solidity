@@ -184,16 +184,24 @@ contract election
         candi[a].name=name;
         candi[a].id=id;
         candi[a].nov=0;
+        /* for(uint256 i=0;i<3;i++)
+       {
+           for(uint256 j=i+1;j<3;j++)
+           {
+               require(candi[i].id!= candi[j].id);
+           }
+       }*/
+        
     }
     function eligibility(uint256 o,uint256 a)public
    {
       require(o<10);
        voter.push(o);
-       for(uint256 n=0;n<voter.length;n++)
+       for(uint256 i=0;i<voter.length;i++)
        {
-           for(uint256 m=n+1;m<voter.length;m++)
+           for(uint256 j=i+1;j<voter.length;j++)
            {
-               require(voter[n]!=voter[m]);
+               require(voter[i]!=voter[j]);
            }
        }
         //require(candi[a].id==_id);
@@ -222,13 +230,14 @@ contract election
      
        return candy;
    }
-   function disply()public constant returns(uint256,string)
+   function disply()public constant returns(uint256,string,uint256,string)
    {
-       for(uint h=0;h<3;h++)
+       for(uint i=0;i<3;i++)
        {
-             if(candy[0]==candi[h].nov)
+             if(candy[0]==candi[i].nov)
        {
-           return (candi[h].id,"is a winner") ;
+           uint256 a=candy[0]-candy[1];
+           return (candi[i].id,"is a winner and won by",a,"votes than candidate 2") ;
        }
        }
         /*for( h=0;h<3;h++)
