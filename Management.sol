@@ -261,3 +261,70 @@ contract election
        return (candi[a].id,candi[a].nov);
    }
 }
+
+
+PROGRAM:5
+
+LIBRARY BOOK MANAGEMENT
+
+
+pragma solidity^0.4.0;
+contract librarymanagement
+{
+    uint256[] c;
+    struct book{
+        uint256 id;
+       // string name;
+        uint256 available;
+    }
+    uint256[] sd;
+    mapping(uint256=>book)b;
+ function booksinlibrary(uint256 a,uint256 id/*,string name*/,uint256 available)public
+    {
+        b[a].id=id;
+        //b[a].name=name;
+         b[a].available=available;
+            c.push(b[a].available);
+    }
+    function studentdetails(uint256 studentid)public returns(string)
+    {
+        sd.push(studentid);
+        for(uint256 i=0;i<sd.length;i++)
+        {
+            for(uint256 j=i+1;j<sd.length;j++)
+            {
+                require(sd[i]!=sd[j]);
+            }
+        }
+        return "saved";
+    }
+    function booktaking(uint256 studentid,uint256 a,uint256 id)public returns(uint256,uint256,uint256)
+    {
+        for(uint256 i=0;i<sd.length;i++)
+        {
+        if(studentid==sd[i])
+        {
+            require(id==b[a].id);
+           b[a].available--;
+        }
+        }
+        
+        return (studentid,b[a].id,b[a].available);
+    }
+    function bookreturning(uint256 studentid,uint256 a)public returns(uint256,uint256)
+    {
+         for(uint256 i=0;i<sd.length;i++)
+        {
+        if(studentid==sd[i])
+        {
+         require(b[a].available<c[a]);
+         b[a].available++;
+        }
+        }
+        return (studentid,b[a].available);
+    }
+    function totalavailablebooks(uint256 a)public constant returns(uint256,/*string,*/uint256)
+    {
+        return (b[a].id, /*b[a].name,*/b[a].available);
+    }
+}
