@@ -411,3 +411,61 @@ contract bustransport
         return  (t[index].count,tc,tp);
     }
 }
+
+
+
+PROGRAM:7
+ONLINE SHOPPIMG
+
+pragma solidity^0.4.0;
+contract onlineshopping
+{
+        struct product{
+        string name;
+        uint256 available;
+        uint256 price;
+    }
+    uint256 start;
+    uint256 end;
+    mapping(address=>product)p;
+    mapping(address=>mapping(address=>product))b;
+    function products(address a,string name,uint256 available,uint256 price)public
+    {
+        p[a].name=name;
+        p[a].available=available;
+        p[a].price=price;
+    }
+    function ordering(address buyer,address a,uint256 n)public returns(string,string,uint256)
+{
+    if(n<=p[a].available)
+    {
+    b[buyer][a].name=p[a].name;
+    b[buyer][a].available=n;
+    start=now;
+    return ("product available", b[buyer][a].name,b[buyer][a].available);
+    }
+    else
+    {
+        return ("product not available", b[buyer][a].name,b[buyer][a].available);
+    }
+}
+    function processing(address a,uint256 price)public returns(string)
+    {
+       end=now;
+        require(end<start+20 seconds);
+         if(p[a].price==price)
+         {
+          p[a].available--;
+         return "product will be delivered within 2 days";
+         }
+         else
+         {
+             return "insufficiant balance";
+         }
+             
+         }
+         function display(address a)public constant returns(string,uint256)
+         {
+             return (p[a].name,p[a].available);
+         }
+}
