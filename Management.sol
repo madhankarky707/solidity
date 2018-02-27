@@ -434,6 +434,7 @@ contract onlineshopping
         p[a].name=name;
         p[a].available=available;
         p[a].price=price;
+        
     }
     function ordering(address buyer,address a,uint256 n)public returns(string,string,uint256)
 {
@@ -449,13 +450,16 @@ contract onlineshopping
         return ("product not available", b[buyer][a].name,b[buyer][a].available);
     }
 }
-    function processing(address a,uint256 price)public returns(string)
+    function processing(address a,uint256 n,uint256 price)public returns(string)
     {
        end=now;
         require(end<start+20 seconds);
-         if(p[a].price==price)
+       uint256 r= p[a].price/p[a].available;
+       uint q=r*n;
+         if(price==q)
          {
-          p[a].available--;
+          p[a].available-=n;
+          p[a].price-=q;
          return "product will be delivered within 2 days";
          }
          else
