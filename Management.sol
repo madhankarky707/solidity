@@ -370,3 +370,44 @@ contract librarymanagement
       return (d[studentid][_id].id,b[a].id,b[a].available);
     }
 }
+
+
+
+PROGRAM:6
+BUS TRANSPORT
+
+
+
+pragma solidity^0.4.0;
+contract bustransport
+{
+    struct ticket
+    {
+       uint256 id;
+        uint256 price;
+        uint256 count;
+    }
+    uint256[] a;
+    uint256 tc=0;
+    uint256 tp=0;
+    mapping(address=>ticket)t;
+    mapping(address=>mapping(address=>ticket))pass;
+    function destinations(address index,uint256 id,uint256 price)public
+    {
+        t[index].id=id;
+        t[index].price=price;
+        t[index].count=0;
+    }
+    function fromsource(address pindex,address dindex,address index,uint256 price)public
+    {
+        require(price==t[index].price);
+        pass[pindex][dindex].id=t[index].id;
+        t[index].count++;
+          tc++;
+          tp+=price;
+    }
+    function display(address index)public constant returns(uint256,uint256,uint256 tp)
+    {
+        return  (t[index].count,tc,tp);
+    }
+}
