@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Test</title>
+    <script src="web3.min.js"></script>
+    
+  </head>
+  <body>
+    <input id="name" type="text" />    //textbox
+    <button id="click">Mine</button>   //button
+    <button id="sclick" onclick="sclick();">See Name</button>           //button
+    <pre id="hashresult"></pre>						//hash
+    Previous Hash : <pre id="prehashresult"></pre>			//displaying hash
+  </body>
+<script>
+   
+        web3.eth.defaultAccount = web3.eth.accounts[0];//default line
+        var sybexcon = web3.eth.contract([   //Abi
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getname",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "b",
+				"type": "string"
+			}
+		],
+		"name": "setname",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	}
+]);
+        var sybex = sybexcon.at('0xaa09e2cc4fe10f825377918270f41bb437988bea');  //address
+     var button = document.getElementById('click');		//assigning variable
+     var sbutton = document.getElementById('sclick');		//assigning variable
+     var input = document.getElementById('name');		//assigning variable
+     var output = document.getElementById('hashresult');	//assigning variable
+     var preoutput = document.getElementById('prehashresult');	//assigning variable
+     if(!web3.isConnected()) {
+  
+        console.log("Ok");
+        
+      } else {
+        console.log("no");
+      }
+      web3.version.getNetwork((err, netId) => {   //checking which network the user is using
+            switch (netId) {		
+              case "1":
+                console.log('This is mainnet')
+                break
+              case "2":
+                console.log('This is the deprecated Morden test network.')
+                break
+              case "3":
+                console.log('This is the ropsten test network.')
+                break
+              case "4":
+                console.log('This is the Rinkeby test network.')
+                break
+              case "42":
+                console.log('This is the Kovan test network.')
+                break
+              default:
+                console.log('This is an unknown network.')
+            }
+        })
+        
+        button.addEventListener('click',function(){
+          return sybex.setname(input.value, function (error,result){
+            if (!error) {		//if not equal to error
+              preoutput.innerHTML = result;	
+              console.log(result);  //displaying the previous output hash
+                             
+            } else {		//if equal to error
+              preoutput.innerHTML = "Error";
+              console.error(error);	//displaying the error
+            }
+        });
+      });
+      function sclick(){
+        
+        return sybex.getname(function(err,res){
+                if (!err) {
+                    output.innerText = res;	//displays the result of given.
+                }
+                else{
+                  output.innerText = "Error";	// returns error.
+                }
+              });
+            }
+</script>
+</html>
