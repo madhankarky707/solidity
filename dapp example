@@ -106,3 +106,182 @@
             }
 </script>
 </html>
+
+
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Bank Wallet</title>
+    <script src="web3.min.js"></script>
+    
+  </head>
+  <body>
+<p>Creating account</p>
+<input id="index1" name="index value" type="text" />
+<input id="cacno" name="accountno" type="text" />
+<input id="cacname" name=accountname type="text" />
+<input id="cacbal"name="accountbalance" type="text" />
+<input type="Button" value="create" id="cre-click"/>
+<pre id="hashresult1"></pre>
+<br>
+<br>
+<p>Deposite</p>
+<input id="index2" name="index value" type="text" />
+<input id="damt" name="deposite amount" type="text" />
+<input type="Button" value="deposite" id="dep-click"/>
+<pre id="hashresult2"></pre>
+<br>
+<br>
+<p>Transfer</p>
+<input id="index3" name="index value" type="text" />
+<input id="tamt" name="transfer amount" type="text" />
+<input id="index4" name="index value" type="text" />
+<input type="Button" value="transfer" id="trans-click"/>
+<pre id="hashresult3"></pre>
+<br>
+<br>
+<p>owner transfer</p>
+<input id="ownerad" name="owner address" type="text" />
+<input type="Button" value="owner transfer" id="ownertrans-click"/>
+<pre id="hashresult4"></pre>
+</body>
+<script>
+   
+        web3.eth.defaultAccount = web3.eth.accounts[0];
+        var sybexcon = web3.eth.contract([
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getname",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "b",
+				"type": "string"
+			}
+		],
+		"name": "setname",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	}
+]);
+ var owner_address = ownercon.at('0xaa09e2cc4fe10f825377918270f41bb437988bea');
+
+var index_1=document.getElementById('index1');
+var ac_no=document.getElementById('cacno');
+var ac_name=document.getElementById('cacname');
+var ac_bal=document.getElementById('cacbal');
+var cre_bt=document.getElementById('cre-click');
+var output_1=document.getElementById('hashresult1');
+
+var index_2=document.getElementById('index2');
+var dep_amt=document.getElementById('damt');
+var dep_bt=document.getElementById('dep-click');
+var output_2=document.getElementById('hashresult2');
+
+var index_3=document.getElementById('index3');
+var trans_amt=document.getElementById('tamt');
+var index_4=document.getElementById('index4');
+var trans_bt=document.getElementById('trans-click');
+var output_3=document.getElementById('hashresult3');
+
+var owner_ad=document.getElementById('ownerad');
+var ownertrans_bt=document.getElementById('ownertrans-click');
+var output_4=document.getElementById('hashresult4');
+
+ if(!web3.isConnected()) {
+  
+        console.log("Ok");
+        
+      } else {
+        console.log("no");
+      }
+      web3.version.getNetwork((err, netId) => {
+            switch (netId) {
+              case "1":
+                console.log('This is mainnet')
+                break
+              case "2":
+                console.log('This is the deprecated Morden test network.')
+                break
+              case "3":
+                console.log('This is the ropsten test network.')
+                break
+              case "4":
+                console.log('This is the Rinkeby test network.')
+                break
+              case "42":
+                console.log('This is the Kovan test network.')
+                break
+              default:
+                console.log('This is an unknown network.')
+            }
+        })
+
+cre_bt.addEventListener('click',function(){
+          return owner_address.creating(index_1.value,ac_no.value,ac_name.value,ac_bal.value function (error,result){
+            if (!error) {
+              output_1.innerHTML = result;
+              console.log(result);
+                             
+            } else {
+              output_1.innerHTML = "Error";
+              console.error(error);
+            }
+        });
+      });
+
+ dep_bt.addEventListener('click',function(){
+ return owner_address.deposite(index_2.value,dep_amt.value function (error,result){
+            if (!error) {
+              output_2.innerHTML = result;
+              console.log(result);
+                             
+            } else {
+              output_2.innerHTML = "Error";
+              console.error(error);
+            }
+        });
+      });
+trans_bt.addEventListener('click',function(){
+return owner_address.transfer(index_3.value,trans_amt.value,index_4.value function (error,result){
+            if (!error) {
+              output_3.innerHTML = result;
+              console.log(result);
+                             
+            } else {
+              output_3.innerHTML = "Error";
+              console.error(error);
+            }
+        });
+      });
+ownertrans_bt.addEventListener('click',function(){
+return owner_address.ownertransfer(owner_ad.value function (error,result){
+            if (!error) {
+              output_4.innerHTML = result;
+              console.log(result);
+                             
+            } else {
+              output_4.innerHTML = "Error";
+              console.error(error);
+            }
+        });
+      });
+</script>
+</html>
