@@ -54,6 +54,275 @@ contract bank
     }
 }
 
+dapp for above bank wallet program:
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Bank Wallet</title>
+    <script src="web3.min.js"></script>
+    
+  </head>
+  <body>
+<h1>Bank Wallet</h1>
+<p>Creating account</p>
+<input id="index1" placeholder="index value" type="text" />
+<input id="cacno" placeholder="accountno" type="text" />
+<input id="cacname" placeholder=accountname type="text" />
+<input id="cacbal" placeholder="accountbalance" type="text" />
+<input type="Button" value="create" id="cre-click"/>
+<pre id="hashresult1"></pre>
+<br>
+<br>
+<p>Deposite</p>
+<input id="index2" placeholder="index value" type="text" />
+<input id="damt" placeholder="deposite amount" type="text" />
+<input type="Button" value="deposite" id="dep-click"/>
+<pre id="hashresult2"></pre>
+<br>
+<br>
+<p>Transfer</p>
+<input id="index3" placeholder="index value" type="text" />
+<input id="tamt" placeholder="transfer amount" type="text" />
+<input id="index4" placeholder="index value" type="text" />
+<input type="Button" value="transfer" id="trans-click"/>
+<pre id="hashresult3"></pre>
+<br>
+<br>
+<p>owner transfer</p>
+<input id="ownerad" placeholder="owner address" type="text" />
+<input type="Button" value="owner transfer" id="ownertrans-click"/>
+<pre id="hashresult4"></pre>
+</body>
+<script>
+   
+        web3.eth.defaultAccount = web3.eth.accounts[0];
+        var ownercon = web3.eth.contract([
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "a",
+				"type": "address"
+			},
+			{
+				"name": "_acno",
+				"type": "uint256"
+			},
+			{
+				"name": "_acname",
+				"type": "string"
+			},
+			{
+				"name": "_acbal",
+				"type": "uint256"
+			}
+		],
+		"name": "creating",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "a",
+				"type": "address"
+			},
+			{
+				"name": "_deposite",
+				"type": "uint256"
+			}
+		],
+		"name": "deposite",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "owner1",
+				"type": "address"
+			}
+		],
+		"name": "ownertransfer",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "a",
+				"type": "address"
+			},
+			{
+				"name": "amt1",
+				"type": "uint256"
+			},
+			{
+				"name": "_a",
+				"type": "address"
+			}
+		],
+		"name": "transfer",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	}
+]);
+ var owner_address = ownercon.at('0x7b5420e8b764e3f6b812ea2962a00db01850989b');
+
+var index_1=document.getElementById('index1');
+var ac_no=document.getElementById('cacno');
+var ac_name=document.getElementById('cacname');
+var ac_bal=document.getElementById('cacbal');
+var cre_bt=document.getElementById('cre-click');
+var output_1=document.getElementById('hashresult1');
+
+var index_2=document.getElementById('index2');
+var dep_amt=document.getElementById('damt');
+var dep_bt=document.getElementById('dep-click');
+var output_2=document.getElementById('hashresult2');
+
+var index_3=document.getElementById('index3');
+var trans_amt=document.getElementById('tamt');
+var index_4=document.getElementById('index4');
+var trans_bt=document.getElementById('trans-click');
+var output_3=document.getElementById('hashresult3');
+
+var owner_ad=document.getElementById('ownerad');
+var ownertrans_bt=document.getElementById('ownertrans-click');
+var output_4=document.getElementById('hashresult4');
+
+ if(web3.isConnected()) {
+  
+        console.log("Ok");
+        
+      } else {
+        console.log("no");
+      }
+      web3.version.getNetwork((err, netId) => {
+            switch (netId) {
+              case "1":
+                console.log('This is mainnet')
+                break
+              case "2":
+                console.log('This is the deprecated Morden test network.')
+                break
+              case "3":
+                console.log('This is the ropsten test network.')
+                break
+              case "4":
+                console.log('This is the Rinkeby test network.')
+                break
+              case "42":
+                console.log('This is the Kovan test network.')
+                break
+              default:
+                console.log('This is an unknown network.')
+            }
+        })
+
+cre_bt.addEventListener('click',function()
+{
+          return owner_address.creating(index_1.value,ac_no.value,ac_name.value,ac_bal.value, function (error,result)
+	{
+            if (!error) {
+              output_1.innerHTML = result;
+              console.log(result);
+                             
+            } else {
+              output_1.innerHTML = "Error";
+              console.error(error);
+            }
+        });
+});
+
+ dep_bt.addEventListener('click',function(){
+ return owner_address.deposite(index_2.value,dep_amt.value, function (error,result){
+            if (!error) {
+              output_2.innerHTML = result;
+              console.log(result);
+                             
+            } else {
+              output_2.innerHTML = "Error";
+              console.error(error);
+            }
+        });
+      });
+
+
+trans_bt.addEventListener('click',function(){
+return owner_address.transfer(index_3.value,trans_amt.value,index_4.value, function (error,result){
+            if (!error) {
+              output_3.innerHTML = result;
+              console.log(result);
+                             
+            } else {
+              output_3.innerHTML = "Error";
+              console.error(error);
+            }
+        });
+      });
+ownertrans_bt.addEventListener('click',function(){
+return owner_address.ownertransfer(owner_ad.value, function (error,result){
+            if (!error) {
+              output_4.innerHTML = result;
+              console.log(result);
+                             
+            } else {
+              output_4.innerHTML = "Error";
+              console.error(error);
+            }
+        });
+      });
+</script>
+</html>
+
 
 PROGRAM:2
 STUDENT INTERVIEW APLLY
@@ -261,6 +530,292 @@ contract election
        return (candi[a].id,candi[a].nov);
    }
 }
+
+dapp for above voting program:
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>voting</title>
+<script src="web3.min.js"></script>
+</head>
+<body bgcolor="green">
+<h1>voting program</h1>
+<br>
+<p>NOMINATION</p>
+<br>
+<input type="text" placeholder="index value" id="ind1" />
+<input type="text" placeholder="nameofcandidate" id="can" />
+<input type="text" placeholder="candidate id" id="id1" />
+<input type="button" value="nomination" id="bt1" />
+<pre id="hashresult1"></pre>
+<br>
+<br>
+<p>VOTING</p>
+<br>
+<input type="text" placeholder="voter" id="vot" />
+<input type="text" placeholder="voter id" id="ind2" />
+<input type="button" value="vote" id="bt2" />
+<pre id="hashresult2"></pre>
+<br>
+<br>
+<p>RESULT</p>
+<br>
+<input type="button" value="result" id="bt3" />
+<pre id="hashresult3"></pre>
+<br>
+<br>
+<p>DISPLY1</p>
+<br>
+<input type="button" value="diaply1" id="bt4" />
+<pre id="hashresult4"></pre>
+<br>
+<br>
+<p>DISPLAY2</p>
+<br>
+<input type="text" placeholder="candidate index" id="ind3" />
+<input type="button" value="display" id="bt5" />
+<pre id="hashresult5"></pre>
+<br>
+<br>
+</body>
+<script>
+
+ web3.eth.defaultAccount = web3.eth.accounts[0];
+        var ownercon = web3.eth.contract([
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "disply1",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"name": "",
+				"type": "string"
+			},
+			{
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "a",
+				"type": "uint256"
+			}
+		],
+		"name": "display2",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "o",
+				"type": "uint256"
+			},
+			{
+				"name": "a",
+				"type": "uint256"
+			}
+		],
+		"name": "eligibility",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "a",
+				"type": "uint256"
+			},
+			{
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"name": "id",
+				"type": "uint256"
+			}
+		],
+		"name": "nomination",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "result",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256[]"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]);
+ var owner_address = ownercon.at('0xee49db06674ee5538f99b46031812eb74e10e643');
+
+<input type="text" placeholder="index value" id="ind1" />
+<input type="text" placeholder="nameofcandidate" id="can" />
+<input type="text" placeholder="candidate id" id="id1" />
+<input type="button" value="nomination" id="bt1" />
+<pre id="hashresult1"></pre>
+
+var ind_1=document.getElementById('ind1');
+var can_name=document.getElementById('can');
+var can_id=document.getElementById('id1');
+var bt_1=document.getElementById('bt1');
+var output_1=document.getElementById('hashresult1');
+
+var v_id=document.getElementById('vot');
+var can_id1=document.getElementById('ind2');
+var bt_2=document.getElementById('bt2');
+var output_2=document.getElementById('hashresult2');
+
+var bt_3=document.getElementById('bt3');
+var output_3=document.getElementById('hashresult3');
+
+var bt_4=document.getElementById('bt4');
+var output_4=document.getElementById('hashresult4');
+
+var can_idb=document.getElementById('ind3');
+var bt_5=document.getElementById('bt5');
+var output_5=document.getElementById('hashresult5');
+
+ if(web3.isConnected()) {
+  
+        console.log("Ok");
+        
+      } else {
+        console.log("no");
+      }
+      web3.version.getNetwork((err, netId) => {
+            switch (netId) {
+              case "1":
+                console.log('This is mainnet')
+                break
+              case "2":
+                console.log('This is the deprecated Morden test network.')
+                break
+              case "3":
+                console.log('This is the ropsten test network.')
+                break
+              case "4":
+                console.log('This is the Rinkeby test network.')
+                break
+              case "42":
+                console.log('This is the Kovan test network.')
+                break
+              default:
+                console.log('This is an unknown network.')
+            }
+        })
+bt_1.addEventListener('click',function()
+{
+	return owner_address.nomination(ind_1.value,can_name.value,can_id.value, function(error,result){
+	if (!error) {
+              output_1.innerHTML = result;
+              console.log(result);
+                             
+            } else {
+              output_1.innerHTML = "Error";
+              console.error(error);
+            }
+	 });
+      });
+bt_2.addEventListener('click',function()
+{
+	return owner_address.eligibility(v_id.value,can_id1.value, function(error,result){
+	if (!error) {
+              output_2.innerHTML = result;
+              console.log(result);
+                             
+            } else {
+              output_2.innerHTML = "Error";
+              console.error(error);
+            }
+	 });
+      });
+
+bt_3.addEventListener('click',function()
+{
+	return owner_address.result( function(error,result){
+	if (!error) {
+              output_3.innerHTML = result;
+              console.log(result);
+                             
+            } else {
+              output_3.innerHTML = "Error";
+              console.error(error);
+            }
+	 });
+      });
+
+bt_4.addEventListener('click',function()
+{
+	return owner_address.disply1( function(error,result){
+	if (!error) {
+              output_4.innerHTML = result;
+              console.log(result);
+                             
+            } else {
+              output_4.innerHTML = "Error";
+              console.error(error);
+            }
+	 });
+      });
+
+bt_5.addEventListener('click',function()
+{
+	return owner_address.display2(can_idb.value, function(error,result){
+	if (!error) {
+              output_5.innerHTML = result;
+              console.log(result);
+                             
+            } else {
+              output_5.innerHTML = "Error";
+              console.error(error);
+            }
+	 });
+      });
+</script>
+</html>
+
 
 
 PROGRAM:5
