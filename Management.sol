@@ -1028,3 +1028,139 @@ contract onlineshopping
              return (p[a].name,p[a].available);
          }
 }
+
+(OR)
+
+pragma solidity^0.4.0;
+contract onlineshopping
+{
+        
+    struct product{
+                    string name;
+                    uint256 available;
+                    uint256 price;
+                    uint256 start;
+                    uint256 end;
+                    bool pa;
+                  }
+    struct buyers{
+                    uint256 buyerid;
+                    uint256 purchase;
+                    uint256 cart;
+                    uint256 voucher;
+                    bool reg;
+                 }
+    uint q;
+    mapping(address=>product)p;
+    mapping(uint256=>buyers)b;
+    modifier check(uint256 buyerid,address a)
+    {
+        require(b[buyerid].reg==true);
+        require(p[a].pa=true);
+        _;
+    }
+    function products(address a,string name,uint256 available,uint256 price)public
+    {
+        require(p[a].pa!=true);
+        p[a].name=name;
+        p[a].available=available;
+        p[a].price=price;
+        p[a].pa=true;
+    }
+    function signup(uint256 buyerid)public returns(string,string,uint256)
+    {
+        if(b[buyerid].reg==true)
+        {
+            return ("start","shopping",b[buyerid].buyerid);
+        }        
+        else{
+            b[buyerid].buyerid=buyerid;
+            b[buyerid].reg=true;
+            return ("successfully logedin","enjoy shopping",b[buyerid].buyerid);
+            }
+    }
+    function ordering(uint256 buyerid,address a,uint256 n)check(buyerid,a) public returns(string,uint256)
+    {
+         if(b[buyerid].reg==true)
+        {
+            require(p[a].available!=0);
+            require(n<=p[a].available);
+            b[buyerid].cart+=n;
+            return ("product available",b[buyerid].cart);
+        }
+    else
+        {
+            return ("please signin",b[buyerid].buyerid);
+        }
+    }
+    function processing(address a,uint256 buyerid,uint256 n,uint256 price,uint256 usingvoucher)check(buyerid,a) public returns(string,uint256)
+    {
+          if((b[buyerid].purchase)==5)
+             {
+               b[buyerid].voucher=500;
+             }
+        if(usingvoucher==0)
+        {
+             r= p[a].price/p[a].available;
+             q=r*b[buyerid].cart;
+         if(price==q)
+         {
+             b[buyerid].cart-=n;
+             return ("product will be delivered within 1 hour",b[buyerid].cart);
+         }
+         else
+         {
+           return ("insufficiant balance",b[buyerid].cart);
+         }
+        
+        }else
+        {
+        require(b[buyerid].voucher!=0);
+         uint256 r= p[a].price/p[a].available;
+         q=r*b[buyerid].cart;
+         if(price==q)
+         {
+             b[buyerid].voucher-=price;
+             b[buyerid].cart-=n;
+             return ("with voucher product will be delivered within 1 hour",b[buyerid].cart);
+         }
+         else
+         {
+             return ("with vaucher insufficiant balance",b[buyerid].cart);
+         }
+            
+             
+        }
+    }
+         function delivery(address a,uint256 buyerid,uint256 n)check(buyerid,a) public
+         {
+             b[buyerid].purchase+=n;
+             p[a].available-=n;
+             p[a].price-=q;
+         }
+         
+             function returning(address a,uint256 buyerid,uint256 n)check(buyerid,a) public
+         {
+             b[buyerid].purchase-=n;
+             uint256 r= p[a].price/p[a].available;
+             q=r*n;
+             p[a].price+=q;
+             p[a].available+=n;
+         }   
+         function buyerdetailes(uint256 buyerid)public constant returns(uint256 buyersid,uint256 purchase,uint256 voucher)
+         {
+             return( b[buyerid].buyerid,b[buyerid].purchase,b[buyerid].voucher);
+         }
+         
+         function display(address a)public constant returns(string productname,uint256 totalavailable,uint256 totalproductprice)
+         {
+             if(p[a].available!=0)
+             {
+                 return (p[a].name,p[a].available,p[a].price);
+             }
+             else
+             {
+                 return ("products has been sold",p[a].available,p[a].price);
+             }
+         }
+}
